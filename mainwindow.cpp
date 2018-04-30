@@ -4,9 +4,24 @@
 #include <QtGui>
 #include <QList>
 #include <QMessageBox>
+#include "treewidgetitem.h"
 
-QTreeWidgetItem *activeItem;
-QTreeWidgetItem *rootIthem;
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui->setupUi(this);
+
+    initHeaders();
+
+    configureTextName();
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
 
 void MainWindow::initHeaders()
 {
@@ -22,27 +37,23 @@ void MainWindow::initHeaders()
     ui->treeWidget->setColumnCount(headerLabels.count());
     ui->treeWidget->setHeaderLabels(headerLabels);
 
-    rootIthem = new QTreeWidgetItem();
+    auto rootIthem = new QTreeWidgetItem();
     rootIthem->setText(0, "BNCT");
+    rootIthem->setText(1, "0");
+    rootIthem->setText(2, "0");
+    rootIthem->setText(3, "0");
+    rootIthem->setText(4, "0");
+    rootIthem->setText(5, "0");
+    rootIthem->setText(6, "0");
     ui->treeWidget->addTopLevelItem(rootIthem);
-    activeItem = rootIthem;
 }
 
-MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+void MainWindow::configureTextName()
 {
-    ui->setupUi(this);
-
-    initHeaders();
     connect(ui->textName, SIGNAL(_keyPressEvent(QKeyEvent*,bool*)),
             this, SLOT(_keyPressEvent(QKeyEvent*,bool*)));
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
 
 void MainWindow::_keyPressEvent(QKeyEvent *event, bool *riseParentEvent)
 {
@@ -65,15 +76,8 @@ void MainWindow::addIthem()
     ithem->setText(5, QString::number(ui->numPt100->value()));
     ithem->setText(6, QString::number(ui->numRelay->value()));
 
-    if (activeItem != nullptr)
-    {
-        activeItem->addChild(ithem);
-        activeItem->setExpanded(true);
-    }
-    else
-    {
-        ui->treeWidget->addTopLevelItem(ithem);
-    }
+    ui->treeWidget->currentItem()->addChild(ithem);
+    ui->treeWidget->currentItem()->setExpanded(true);
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -81,22 +85,37 @@ void MainWindow::on_pushButton_clicked()
     addIthem();
 
     ui->textName->setText("");
+
+    calculateParentChannels();
 }
 
-void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
+void MainWindow::calculateParentChannels()
 {
-    activeItem = item;
+    auto *twi = new TreeWidgetItem();
+    doStuffWithEveryItemInMyTree(ui->treeWidget->headerItem(), twi);
 }
 
-void MainWindow::on_btnSave_clicked()
+void MainWindow::doStuffWithEveryItemInMyTree(QTreeWidgetItem *item, TreeWidgetItem *twi)
 {
-    //doStuffWithEveryItemInMyTree( ui->treeWidget->invisibleRootItem() );
-}
-
-void doStuffWithEveryItemInMyTree( QTreeWidgetItem *item )
-{
-    // Do something with item ...
-
-    for( int i = 0; i < item->childCount(); ++i )
-        doStuffWithEveryItemInMyTree( item->child(i) );
+    if (item->childCount() != 0)
+    {
+        twi->clear();
+        for( int i = 0; i < item->childCount(); ++i )
+            doStuffWithEveryItemInMyTree(item->child(i), twi);
+        item->setText(1, QString::number(twi->_adc));
+        item->setText(2, QString::number(twi->_dac));
+        item->setText(3, QString::number(twi->_di));
+        item->setText(4, QString::number(twi->_do));
+        item->setText(5, QString::number(twi->_pt100));
+        item->setText(6, QString::number(twi->_relay));
+    }
+    else
+    {
+        twi->add(item->text(1).toInt(),
+                 item->text(2).toInt(),
+                 item->text(3).toInt(),
+                 item->text(4).toInt(),
+                 item->text(5).toInt(),
+                 item->text(6).toInt());
+    }
 }

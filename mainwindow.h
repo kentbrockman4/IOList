@@ -5,6 +5,7 @@
 #include <QtCore>
 #include <QtGui>
 #include <QTreeWidgetItem>
+#include "treewidgetitem.h"
 
 namespace Ui {
 class MainWindow;
@@ -20,19 +21,19 @@ public:
 
     void initHeaders();
 
+private:
+    void calculateParentChannels();
     void addIthem();
+    void doStuffWithEveryItemInMyTree(QTreeWidgetItem *item, TreeWidgetItem *twi);
 
 private slots:
     void on_pushButton_clicked();
-
-    void on_treeWidget_itemClicked(QTreeWidgetItem *item, int column);
-
-    void on_btnSave_clicked();
 
     void _keyPressEvent(QKeyEvent *event, bool *riseParentEvent);
 
 private:
     Ui::MainWindow *ui;
+    void configureTextName();
 };
 
 #endif // MAINWINDOW_H
