@@ -26,11 +26,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    treewidgetitem.cpp
+    treewidgetitem.cpp \
+    extendedqtextedit.cpp
 
 HEADERS += \
         mainwindow.h \
-    treewidgetitem.h
+    treewidgetitem.h \
+    extendedqtextedit.h
 
 FORMS += \
         mainwindow.ui

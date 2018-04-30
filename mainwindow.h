@@ -29,6 +29,8 @@ private slots:
 
     void on_btnSave_clicked();
 
+    void _keyPressEvent(QKeyEvent *event, bool *riseParentEvent);
+
 private:
     Ui::MainWindow *ui;
 };

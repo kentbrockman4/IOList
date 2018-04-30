@@ -131,7 +131,7 @@
       <x>290</x>
       <y>280</y>
       <width>311</width>
-      <height>81</height>
+      <height>139</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -145,7 +145,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QTextEdit" name="textName"/>
+        <widget class="ExtendedQTextEdit" name="textName" native="true">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>1</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -165,12 +172,9 @@
        </property>
       </widget>
      </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_7"/>
-     </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>680</x>
@@ -218,6 +222,14 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>ExtendedQTextEdit</class>
+   <extends>QWidget</extends>
+   <header>extendedqtextedit.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

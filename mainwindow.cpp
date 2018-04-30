@@ -3,6 +3,7 @@
 #include <QtCore>
 #include <QtGui>
 #include <QList>
+#include <QMessageBox>
 
 QTreeWidgetItem *activeItem;
 QTreeWidgetItem *rootIthem;
@@ -34,7 +35,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     initHeaders();
-    connect(ui->textName, SIGNAL())
+    connect(ui->textName, SIGNAL(_keyPressEvent(QKeyEvent*,bool*)),
+            this, SLOT(_keyPressEvent(QKeyEvent*,bool*)));
 }
 
 MainWindow::~MainWindow()
@@ -42,6 +44,15 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::_keyPressEvent(QKeyEvent *event, bool *riseParentEvent)
+{
+    if ((event->key() == Qt::Key_Enter) || (event->key() == Qt::Key_Return))
+    {
+        *riseParentEvent = false;
+
+        on_pushButton_clicked();
+    }
+}
 
 void MainWindow::addIthem()
 {
@@ -70,7 +81,6 @@ void MainWindow::on_pushButton_clicked()
     addIthem();
 
     ui->textName->setText("");
-    ui->textName->setFocus();
 }
 
 void MainWindow::on_treeWidget_itemClicked(QTreeWidgetItem *item, int column)
