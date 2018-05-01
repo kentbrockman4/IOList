@@ -5,7 +5,7 @@
 #include <QtCore>
 #include <QtGui>
 #include <QTreeWidgetItem>
-#include "treewidgetitem.h"
+#include "treewidgetiteminfo.h"
 
 namespace Ui {
 class MainWindow;
@@ -24,7 +24,7 @@ public:
 private:
     void calculateParentChannels();
     void addIthem();
-    void doStuffWithEveryItemInMyTree(QTreeWidgetItem *item, TreeWidgetItem *twi);
+    void doStuffWithEveryItemInMyTree(QTreeWidgetItem *item, TreeWidgetItemInfo *parentInfo);
 
 private slots:
     void on_pushButton_clicked();

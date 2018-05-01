@@ -4,7 +4,7 @@
 #include <QtGui>
 #include <QList>
 #include <QMessageBox>
-#include "treewidgetitem.h"
+#include "treewidgetiteminfo.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -91,27 +91,34 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::calculateParentChannels()
 {
-    auto *twi = new TreeWidgetItem();
-    doStuffWithEveryItemInMyTree(ui->treeWidget->headerItem(), twi);
+    auto *twi = new TreeWidgetItemInfo();
+    twi->clear();
+    doStuffWithEveryItemInMyTree(ui->treeWidget->topLevelItem(0), twi);
 }
 
-void MainWindow::doStuffWithEveryItemInMyTree(QTreeWidgetItem *item, TreeWidgetItem *twi)
+void MainWindow::doStuffWithEveryItemInMyTree(QTreeWidgetItem *item, TreeWidgetItemInfo *parentInfo)
 {
-    if (item->childCount() != 0)
+    auto name = item->text(0);
+    auto childCount = item->childCount();
+    qDebug() << name << ":" << childCount;
+    if (childCount != 0)
     {
-        twi->clear();
-        for( int i = 0; i < item->childCount(); ++i )
-            doStuffWithEveryItemInMyTree(item->child(i), twi);
-        item->setText(1, QString::number(twi->_adc));
-        item->setText(2, QString::number(twi->_dac));
-        item->setText(3, QString::number(twi->_di));
-        item->setText(4, QString::number(twi->_do));
-        item->setText(5, QString::number(twi->_pt100));
-        item->setText(6, QString::number(twi->_relay));
+        TreeWidgetItemInfo thisInfo;
+        thisInfo.clear();
+        for( int i = 0; i < childCount; ++i )
+            doStuffWithEveryItemInMyTree(item->child(i), &thisInfo);
+        item->setText(1, QString::number(thisInfo._adc));
+        item->setText(2, QString::number(thisInfo._dac));
+        item->setText(3, QString::number(thisInfo._di));
+        item->setText(4, QString::number(thisInfo._do));
+        item->setText(5, QString::number(thisInfo._pt100));
+        item->setText(6, QString::number(thisInfo._relay));
+
+        *parentInfo = *parentInfo + thisInfo;
     }
     else
     {
-        twi->add(item->text(1).toInt(),
+        parentInfo->add(item->text(1).toInt(),
                  item->text(2).toInt(),
                  item->text(3).toInt(),
                  item->text(4).toInt(),

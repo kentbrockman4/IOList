@@ -3,11 +3,12 @@
 
 #include <QtCore>
 
-class TreeWidgetItem
+class TreeWidgetItemInfo
 {
 
 public:
-    TreeWidgetItem();
+    TreeWidgetItemInfo();
+    TreeWidgetItemInfo operator+(const TreeWidgetItemInfo& rhs);
     void clear();
     void add(int _adc,
                     int _dac,
