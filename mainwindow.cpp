@@ -69,7 +69,16 @@ void MainWindow::_keyPressEvent(QKeyEvent *event, bool *riseParentEvent)
 
 void MainWindow::addIthem()
 {
-    QTreeWidgetItem *ithem = new QTreeWidgetItem();
+    QTreeWidgetItem *ithem;
+    if (editMode)
+    {
+        ithem = ui->treeWidget->currentItem();
+    }
+    else
+    {
+        ithem = new QTreeWidgetItem();
+    }
+
     ithem->setText(0, ui->textName->toPlainText());
     ithem->setText(1, QString::number(ui->numADC->value()));
     ithem->setText(2, QString::number(ui->numDAC->value()));
@@ -78,8 +87,17 @@ void MainWindow::addIthem()
     ithem->setText(5, QString::number(ui->numPt100->value()));
     ithem->setText(6, QString::number(ui->numRelay->value()));
 
-    ui->treeWidget->currentItem()->addChild(ithem);
-    ui->treeWidget->currentItem()->setExpanded(true);
+    if (editMode)
+    {
+        editMode = false;
+        ui->btnAdd->setText("Add");
+    }
+    else
+    {
+        ui->treeWidget->currentItem()->addChild(ithem);
+        ui->treeWidget->currentItem()->setExpanded(true);
+    }
+
 }
 
 void MainWindow::resetInput()
@@ -110,7 +128,6 @@ void MainWindow::calculateParentChannels()
 
 void MainWindow::refreshTotals(QTreeWidgetItem *item, TreeWidgetItemInfo *parentInfo)
 {
-    auto name = item->text(0);
     auto childCount = item->childCount();
     if (childCount != 0)
     {
@@ -156,24 +173,19 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int colu
     ui->numPt100->setValue(item->text(5).toInt());
     ui->numRelay->setValue(item->text(6).toInt());
 
-    ui->btnEdit->setEnabled(true);
-}
-
-void MainWindow::on_btnEdit_clicked()
-{
-    ui->btnEdit->setEnabled(false);
-
-    auto item = ui->treeWidget->currentItem();
-    item->setText(0, ui->textName->toPlainText());
-    item->setText(1, QString::number(ui->numADC->value()));
-    item->setText(2, QString::number(ui->numDAC->value()));
-    item->setText(3, QString::number(ui->numDI->value()));
-    item->setText(4, QString::number(ui->numDO->value()));
-    item->setText(5, QString::number(ui->numPt100->value()));
-    item->setText(6, QString::number(ui->numRelay->value()));
+    ui->btnAdd->setText("Edit");
+    editMode = true;
+    ui->btnCancel->setVisible(true);
 }
 
 void MainWindow::on_btnAdd_clicked()
 {
     this->add();
+}
+
+void MainWindow::on_btnCancel_clicked()
+{
+    ui->btnCancel->setVisible(false);
+
+    editMode = false;
 }
