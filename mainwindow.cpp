@@ -177,11 +177,6 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int colu
     ui->numRelay->setValue(item->text(6).toInt());
 
     setEditMode(true);
-
-    if (item->childCount() != 0)
-    {
-        ui->btnDelete->setVisible(false);
-    }
 }
 
 void MainWindow::on_btnAdd_clicked()
@@ -214,6 +209,30 @@ void MainWindow::on_btnDelete_clicked()
 {
     setEditMode(false);
 
-    delete ui->treeWidget->currentItem();
+    try
+    {
+        deleteChildItems(ui->treeWidget->currentItem());
+    }
+    catch(std::exception &e)
+    {
+        qDebug() << e.what();
+    }
+    catch(...)
+    {
+        qDebug() << "err";
+    }
 
+}
+
+void MainWindow::deleteChildItems(QTreeWidgetItem *item)
+{
+    auto name = item->text(0);
+    int childCount = item->childCount();
+
+    for(int i=0; i <childCount ; i++)
+    {
+        deleteChildItems(item->child(i));
+    }
+
+    delete item;
 }

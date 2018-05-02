@@ -47,6 +47,7 @@ private:
     void initBtn();
     void setBtnVisible(bool newValue);
     void setEditMode(bool newValue);
+    void deleteChildItems(QTreeWidgetItem *item);
 };
 
 #endif // MAINWINDOW_H
