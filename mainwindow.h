@@ -29,17 +29,18 @@ private:
     void refreshTotals(QTreeWidgetItem *item, TreeWidgetItemInfo *parentInfo);
 
 private slots:
-    void on_pushButton_clicked();
-
     void _keyPressEvent(QKeyEvent *event, bool *riseParentEvent);
 
     void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column);
 
     void on_btnEdit_clicked();
 
+    void on_btnAdd_clicked();
+
 private:
     Ui::MainWindow *ui;
     void configureTextName();
+    void add();
 };
 
 #endif // MAINWINDOW_H
