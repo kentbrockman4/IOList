@@ -37,11 +37,16 @@ private slots:
 
     void on_btnCancel_clicked();
 
+    void on_btnDelete_clicked();
+
 private:
     Ui::MainWindow *ui;
     void configureTextName();
     void add();
     bool editMode = false;
+    void initBtn();
+    void setBtnVisible(bool newValue);
+    void setEditMode(bool newValue);
 };
 
 #endif // MAINWINDOW_H

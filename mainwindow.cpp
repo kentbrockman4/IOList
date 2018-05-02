@@ -7,6 +7,8 @@
 #include "treewidgetiteminfo.h"
 
 
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -16,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     initTreeWidget();
 
     configureTextName();
+
+    setBtnVisible(false);
 }
 
 MainWindow::~MainWindow()
@@ -89,8 +93,7 @@ void MainWindow::addIthem()
 
     if (editMode)
     {
-        editMode = false;
-        ui->btnAdd->setText("Add");
+        setEditMode(false);
     }
     else
     {
@@ -173,9 +176,12 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int colu
     ui->numPt100->setValue(item->text(5).toInt());
     ui->numRelay->setValue(item->text(6).toInt());
 
-    ui->btnAdd->setText("Edit");
-    editMode = true;
-    ui->btnCancel->setVisible(true);
+    setEditMode(true);
+
+    if (item->childCount() != 0)
+    {
+        ui->btnDelete->setVisible(false);
+    }
 }
 
 void MainWindow::on_btnAdd_clicked()
@@ -185,7 +191,29 @@ void MainWindow::on_btnAdd_clicked()
 
 void MainWindow::on_btnCancel_clicked()
 {
-    ui->btnCancel->setVisible(false);
+    setEditMode(false);
+}
 
-    editMode = false;
+void MainWindow::setBtnVisible(bool newValue)
+{
+    ui->btnCancel->setVisible(newValue);
+    ui->btnDelete->setVisible(newValue);
+}
+
+void MainWindow::setEditMode(bool newValue)
+{
+    editMode = newValue;
+    setBtnVisible(newValue);
+    if (newValue)
+        ui->btnAdd->setText("Edit");
+    else
+        ui->btnAdd->setText("Add");
+}
+
+void MainWindow::on_btnDelete_clicked()
+{
+    setEditMode(false);
+
+    delete ui->treeWidget->currentItem();
+
 }
