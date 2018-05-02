@@ -19,19 +19,23 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    void initHeaders();
+    void initTreeWidget();
 
     void resetInput();
     
 private:
     void calculateParentChannels();
     void addIthem();
-    void doStuffWithEveryItemInMyTree(QTreeWidgetItem *item, TreeWidgetItemInfo *parentInfo);
+    void refreshTotals(QTreeWidgetItem *item, TreeWidgetItemInfo *parentInfo);
 
 private slots:
     void on_pushButton_clicked();
 
     void _keyPressEvent(QKeyEvent *event, bool *riseParentEvent);
+
+    void on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int column);
+
+    void on_btnEdit_clicked();
 
 private:
     Ui::MainWindow *ui;

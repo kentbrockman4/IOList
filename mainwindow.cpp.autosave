@@ -159,5 +159,12 @@ void MainWindow::on_treeWidget_itemDoubleClicked(QTreeWidgetItem *item, int colu
 
 void MainWindow::on_btnEdit_clicked()
 {
-
+    auto item = ui->treeWidget->currentItem();
+    item->setText(0, ui->textName->toPlainText());
+    item->setText(1, QString::number(thisInfo._adc));
+    item->setText(2, QString::number(thisInfo._dac));
+    item->setText(3, QString::number(thisInfo._di));
+    item->setText(4, QString::number(thisInfo._do));
+    item->setText(5, QString::number(thisInfo._pt100));
+    item->setText(6, QString::number(thisInfo._relay));
 }
