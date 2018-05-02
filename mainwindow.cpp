@@ -80,20 +80,30 @@ void MainWindow::addIthem()
     ui->treeWidget->currentItem()->setExpanded(true);
 }
 
+void MainWindow::resetInput()
+{
+    ui->textName->setText("");
+    ui->numADC->setValue(0);
+    ui->numDAC->setValue(0);
+    ui->numDI->setValue(0);
+    ui->numDO->setValue(0);
+    ui->numPt100->setValue(0);
+    ui->numRelay->setValue(0);
+}
+
 void MainWindow::on_pushButton_clicked()
 {
     addIthem();
 
-    ui->textName->setText("");
+    resetInput();
 
     calculateParentChannels();
 }
 
 void MainWindow::calculateParentChannels()
 {
-    auto *twi = new TreeWidgetItemInfo();
-    twi->clear();
-    doStuffWithEveryItemInMyTree(ui->treeWidget->topLevelItem(0), twi);
+    auto *thisInfo = new TreeWidgetItemInfo();
+    doStuffWithEveryItemInMyTree(ui->treeWidget->topLevelItem(0), thisInfo);
 }
 
 void MainWindow::doStuffWithEveryItemInMyTree(QTreeWidgetItem *item, TreeWidgetItemInfo *parentInfo)
@@ -104,7 +114,6 @@ void MainWindow::doStuffWithEveryItemInMyTree(QTreeWidgetItem *item, TreeWidgetI
     if (childCount != 0)
     {
         TreeWidgetItemInfo thisInfo;
-        thisInfo.clear();
         for( int i = 0; i < childCount; ++i )
             doStuffWithEveryItemInMyTree(item->child(i), &thisInfo);
         item->setText(1, QString::number(thisInfo._adc));

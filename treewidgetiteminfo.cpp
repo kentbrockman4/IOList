@@ -4,7 +4,7 @@
 TreeWidgetItemInfo::TreeWidgetItemInfo()
 {
 
-
+    this->clear();
 }
 
 TreeWidgetItemInfo TreeWidgetItemInfo::operator+(const TreeWidgetItemInfo& rhs)

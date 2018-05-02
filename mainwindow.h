@@ -21,6 +21,8 @@ public:
 
     void initHeaders();
 
+    void resetInput();
+    
 private:
     void calculateParentChannels();
     void addIthem();
